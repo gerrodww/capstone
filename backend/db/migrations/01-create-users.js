@@ -29,6 +29,19 @@ module.exports = {
         type: Sequelize.STRING.BINARY,
         allowNull: false
       },
+      bio : {
+        type: Sequelize.STRING(256),
+        allowNull: true
+      },
+      image: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      darkMode: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

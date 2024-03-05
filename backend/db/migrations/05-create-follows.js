@@ -1,7 +1,7 @@
 'use strict';
 
 let options = {};
-options.tableName = 'Likes';
+options.tableName = 'Follows';
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
@@ -15,15 +15,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userId: {
+      followerId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: { model: "Users", key: "id", schema: options.schema}
+        type: Sequelize.INTEGER
       },
-      postId: {
+      followedId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: { model: "Posts", key: "id", schema: options.schema}
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

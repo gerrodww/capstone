@@ -15,6 +15,34 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      body : {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      imageUrl: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
+      userId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: "Users", key: "id", schema: options.schema}
+      },
+      postId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: "Posts", key: "id", schema: options.schema}
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
     }, options);
   },
 
