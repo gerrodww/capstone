@@ -1,11 +1,11 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Follows extends Model {
+  class Follow extends Model {
     static associate(models) {
     }
   }
-  Follows.init({
+  Follow.init({
     followerId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Follows'
+    modelName: 'Follow'
   });
-  return Follows
+  return Follow
 };

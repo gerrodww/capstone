@@ -3,19 +3,21 @@ const { Model, Validator } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      User.hasMany(models.Post, { foreignKey: 'userId' })
-      User.hasMany(models.Comment, { foreignKey: 'userId' })
-      User.hasMany(models.Like, { foreignKey: 'userId' })
+      User.hasMany(models.Post, { foreignKey: 'userId', onDelete: 'cascade', hooks:true })
+      User.hasMany(models.Comment, { foreignKey: 'userId', onDelete: 'cascade', hooks:true })
+      User.hasMany(models.Like, { foreignKey: 'userId', onDelete: 'cascade', hooks:true })
 
       User.belongsToMany(models.User, { 
         as: 'followers',
         through: 'Follows', 
-        foreignKey: 'followedId' 
+        foreignKey: 'followedId',
+        hooks: true
       });
       User.belongsToMany(models.User, { 
         as: 'following',
         through: 'Follows', 
-        foreignKey: 'followerId' 
+        foreignKey: 'followerId',
+        hooks: true 
       });
     }
   }

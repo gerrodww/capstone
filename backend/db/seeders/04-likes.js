@@ -89,6 +89,10 @@ module.exports = {
           userId: 6,
           postId: 3
         },
+        {
+          userId: 2,
+          postId: 10
+        },
       ], {})
     },
 

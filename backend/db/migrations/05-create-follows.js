@@ -17,11 +17,15 @@ module.exports = {
       },
       followerId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: "Users", key: "id", schema: options.schema},
+        onDelete: 'CASCADE'
       },
       followedId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: "Users", key: "id", schema: options.schema},
+        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,
