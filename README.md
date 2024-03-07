@@ -4,6 +4,6 @@
 
 ![db-schema]
 
-[db-schema]: ./images/example.png
+[db-schema]: ![alt text](image.png)
 
 ## API Documentation
