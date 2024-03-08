@@ -10,13 +10,13 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(models.User, { 
         as: 'followers',
         through: 'Follows', 
-        foreignKey: 'followedId',
+        foreignKey: 'follower',
         hooks: true
       });
       User.belongsToMany(models.User, { 
         as: 'following',
         through: 'Follows', 
-        foreignKey: 'followerId',
+        foreignKey: 'leader',
         hooks: true 
       });
     }

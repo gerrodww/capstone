@@ -6,11 +6,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Follow.init({
-    followerId: {
+    follower: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    followedId: {
+    leader: {
       type: DataTypes.INTEGER,
       allowNull: false
     }

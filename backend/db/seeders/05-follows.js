@@ -18,44 +18,44 @@ module.exports = {
       options.tableName = "Follows";
       return queryInterface.bulkInsert(options, [
         {
-          followerId: 1,
-          followedId: 2
+          follower: 1,
+          leader: 2
         },
         {
-          followerId: 1,
-          followedId: 3
+          follower: 1,
+          leader: 3
         },
         {
-          followerId: 1,
-          followedId: 4
+          follower: 1,
+          leader: 4
         },
         {
-          followerId: 1,
-          followedId: 5
+          follower: 1,
+          leader: 5
         },
         {
-          followerId: 1,
-          followedId: 6
+          follower: 1,
+          leader: 6
         },
         {
-          followerId: 2,
-          followedId: 1
+          follower: 2,
+          leader: 1
         },
         {
-          followerId: 3,
-          followedId: 1
+          follower: 3,
+          leader: 1
         },
         {
-          followerId: 4,
-          followedId: 1
+          follower: 4,
+          leader: 1
         },
         {
-          followerId: 5,
-          followedId: 1
+          follower: 5,
+          leader: 1
         },
         {
-          followerId: 6,
-          followedId: 1
+          follower: 6,
+          leader: 1
         },
       ], {})
     },
@@ -66,7 +66,7 @@ module.exports = {
       options.tableName = "Follows";
       const Op = Sequelize.Op;
       return queryInterface.bulkDelete(options, {
-        followerId: {[Op.in]: []}
+        follower: {[Op.in]: []}
       })
     }
   }

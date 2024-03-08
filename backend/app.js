@@ -33,23 +33,22 @@ app.use(
 // Set the _csrf token and create req.csrfToken method
 
 //COMMENT BACK IN *****
-// console.log('from app.js 34-36 comment back in csrf')
+console.log('******^^***^*^**^*^      from app.js 34-36 comment back in csrf    ******^**^*^*^&&^*^&&^*^&*^***')
 
-app.use(
-    csurf({
-        cookie: {
-            secure: isProduction,
-            sameSite: isProduction && "Lax",
-            httpOnly: true
-        }
-    })
-);
+// app.use(
+//     csurf({
+//         cookie: {
+//             secure: isProduction,
+//             sameSite: isProduction && "Lax",
+//             httpOnly: true
+//         }
+//     })
+// );
 
 app.use(routes);
 
 // Catch unhandled requests and forward to error handler.
 app.use((_req, _res, next) => {
-    // console.log(_req._parsedOriginalUrl.pathname, " ^^^^^^")
     const err = new Error("The requested resource couldn't be found.");
     err.title = "Resource Not Found";
     err.errors = { message: "The requested resource couldn't be found." };
