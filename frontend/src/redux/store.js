@@ -4,11 +4,16 @@ import {
     compose,
     combineReducers,
 } from "redux";
+
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
+import postReducer from "./post";
+import likeReducer from "./like";
 
 const rootReducer = combineReducers({
     session: sessionReducer,
+    posts: postReducer,
+    likes: likeReducer
 });
 
 let enhancer;

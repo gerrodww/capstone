@@ -24,19 +24,20 @@ router.post('/new:postId', requireAuth, async (req, res) => {
 });
 
 //GET LIKED POSTS BY USER ID '/api/likes/mine'
-//possible fix: thunk that returns all posts with users likes and other likes included as these returns posts with have 1 like
 router.get('/mine', requireAuth, async (req, res) => {
   const userId = req.user.id
 
   const posts = await Post.findAll({
     include : [
       { model: Comment },
-      { model: Like, where: { userId } }
+      { model: Like }
     ],
     order: [['id', 'DESC']]
   });
 
-  return res.status(200).json(posts)
+  const likedPosts = posts.filter(post => post.Likes.some(like => like.userId === userId));
+
+  return res.status(200).json(likedPosts);
 });
 
 //DELETE LIKE BY POST ID '/api/likes/delete1'
