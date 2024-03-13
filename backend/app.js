@@ -33,17 +33,17 @@ app.use(
 // Set the _csrf token and create req.csrfToken method
 
 //COMMENT BACK IN *****
-console.log('******^^***^*^**^*^      from app.js 34-36 comment back in csrf    ******^**^*^*^&&^*^&&^*^&*^***')
+// console.log('******^^***^*^**^*^      from app.js 34-36 comment back in csrf    ******^**^*^*^&&^*^&&^*^&*^***')
 
-// app.use(
-//     csurf({
-//         cookie: {
-//             secure: isProduction,
-//             sameSite: isProduction && "Lax",
-//             httpOnly: true
-//         }
-//     })
-// );
+app.use(
+    csurf({
+        cookie: {
+            secure: isProduction,
+            sameSite: isProduction && "Lax",
+            httpOnly: true
+        }
+    })
+);
 
 app.use(routes);
 

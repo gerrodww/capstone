@@ -1,6 +1,6 @@
 const express = require('express');
 const { requireAuth } = require('../../utils/auth');
-const { Post, Comment, Like } = require('../../db/models')
+const { Post, Comment, Like, User } = require('../../db/models')
 
 const router = express.Router();
 
@@ -9,7 +9,8 @@ router.get('/all', async (req, res) => {
   const posts = await Post.findAll({
     include : [
       { model: Comment },
-      { model: Like}
+      { model: Like},
+      { model: User, attributes: ['username']}
     ],
     order: [['id', 'DESC']]
   });
@@ -24,7 +25,9 @@ router.get('/user:userId', async (req, res) => {
     where: { userId },
     include : [
       { model: Comment },
-      { model: Like}
+      { model: Like},
+      {model: User, attributes: ['username']}
+      
     ],
     order: [['id', 'DESC']]
   });
@@ -44,7 +47,8 @@ router.get('/post:postId', async (req, res) => {
     where: { id: postId },
     include : [
       { model: Comment },
-      { model: Like}
+      { model: Like},
+      {model: User, attributes: ['username']}
     ]
   });
 
