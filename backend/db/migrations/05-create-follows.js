@@ -15,13 +15,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      followerId: {
+      follower: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: { model: "Users", key: "id", schema: options.schema},
         onDelete: 'CASCADE'
       },
-      followedId: {
+      leader: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: { model: "Users", key: "id", schema: options.schema},
