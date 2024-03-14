@@ -1,0 +1,27 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /* position: relative; */
+}
+
+.right-bar, .side-bar {
+  width: 500px;
+  height: 1000px;
+  position: fixed;
+}
+
+.side-bar {
+  left: 0;
+  background-color: whitesmoke;
+  margin-left: 155px;
+}
+
+.right-bar {
+  right: 0;
+  background-color: rgb(221, 168, 168);
+}
+
+.posts {
+  
+}

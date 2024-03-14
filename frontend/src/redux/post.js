@@ -7,6 +7,8 @@ const LOAD_POST = 'posts/load_post'
 const DELETE_POST = 'posts/delete_post'
 const UPDATE_POST = 'posts/update_post'
 
+const RESET_POSTS = 'posts/reset'
+
 //ACTION CREATORS
 const loadAllPosts = (posts) => {
   return {
@@ -35,6 +37,12 @@ const updatePost = (post) => {
     payload: post
   }
 }
+
+// export const resetPosts = () => {
+//   return {
+//     type: RESET_POSTS
+//   }
+// }
 
 //THUNKS
 export const thunkAllPosts = () => async (dispatch) => {
@@ -114,6 +122,14 @@ function postReducer(state = {}, action) {
       postsState[action.payload.id] = action.payload
       return postsState;
     }
+    // case RESET_POSTS: {
+    //   return {
+    //     ...postsState,
+    //     showUserPosts: false,
+    //     showUserComments: false,
+    //     showUserLikes: false
+    //   }
+    // }
 
     default: {
       return postsState;

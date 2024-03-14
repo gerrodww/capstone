@@ -1,15 +1,26 @@
 const express = require('express');
 const { requireAuth } = require('../../utils/auth');
-const { Comment, Post } = require('../../db/models');
+const { Comment, Post, Like, User } = require('../../db/models');
 
 const router = express.Router();
 
 //GET ALL USER COMMENTS '/api/comments/mine'
 router.get('/mine', requireAuth, async (req, res) => {
   const userId = req.user.id 
-  const comments = await Comment.findAll({ where: { userId }, order: [['postId', 'DESC']]})
+  // const comments = await Comment.findAll({ where: { userId }, order: [['postId', 'DESC']]})
+  const posts = await Post.findAll({
+    include : [
+      { model: Comment },
+      { model: Like },
+      { model: User, attributes: ['username']}
+    ]
+  });
 
-  return res.json(comments)
+  const postsWithUserComments = posts.filter(post => {
+    return post.Comments.some(comment => comment.userId === userId);
+  });
+
+  return res.json(postsWithUserComments);
 });
 
 //CREATE COMMENT BY POST ID '/api/comments/new1'
@@ -21,7 +32,9 @@ router.post('/new:postId', requireAuth, async (req, res) => {
   const post = await Post.findOne({
     where: { id: postId },
     include : [
-      { model: Comment }
+      { model: Comment },
+      { model: Like },
+      { model: User, attributes: ['username']}
     ]
   });
   if (!post) return res.status(404).json({ message: 'Post not found' });

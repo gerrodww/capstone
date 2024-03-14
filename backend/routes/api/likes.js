@@ -1,6 +1,6 @@
 const express = require('express');
 const { requireAuth } = require('../../utils/auth');
-const { Like, Post, Comment } = require('../../db/models');
+const { Like, Post, Comment, User } = require('../../db/models');
 
 const router = express.Router();
 
@@ -30,7 +30,8 @@ router.get('/mine', requireAuth, async (req, res) => {
   const posts = await Post.findAll({
     include : [
       { model: Comment },
-      { model: Like }
+      { model: Like },
+      { model: User, attributes: ['username']}
     ],
     order: [['id', 'DESC']]
   });

@@ -25,7 +25,7 @@ const NewPostForm = () => {
   }
 
   return (
-    <>
+    <div className="new-post">
     <div>Create a new post</div>
     <form onSubmit={handleSubmit}>
 
@@ -44,7 +44,7 @@ const NewPostForm = () => {
       <br />
       <button type="submit">Create post</button>
     </form>
-    </>
+    </div>
   )
 }
 
