@@ -1,6 +1,9 @@
 import { createSelector } from "reselect";
 import { csrfFetch } from "./csrf"
-import { thunkPostById } from "./post";
+
+import { thunkAllPosts, thunkPostById } from "./post";
+import { thunkCurrentUserPosts } from "./userPosts";
+import { thunkUserComments } from "./comment";
 
 //ACTON TYPES
 const LOAD_USERS_LIKES = 'likes/user'
@@ -31,7 +34,13 @@ export const thunkPostLike = (postId) => async (dispatch) => {
   })
   if (res.ok) {
     const id = postId
-    dispatch(thunkPostById(id))
+    await Promise.all([
+      dispatch(thunkAllPosts()),
+      dispatch(thunkCurrentUserPosts()),
+      dispatch(thunkUserComments()),
+      dispatch(thunkUsersLikes()),
+      dispatch(thunkPostById(id))
+    ])
   } else {
     return { 'error': res}
   }
@@ -54,7 +63,14 @@ export const thunkUnlike = (postId) => async (dispatch) => {
   })
   if (res.ok) {
     const id = postId;
-    await dispatch(deleteLike(id))
+    await Promise.all([
+      dispatch(deleteLike(id)),
+      dispatch(thunkAllPosts()),
+      dispatch(thunkCurrentUserPosts()),
+      dispatch(thunkUserComments()),
+      dispatch(thunkUsersLikes()),
+      dispatch(thunkPostById(id))
+    ])
     return {"message": "Post successfully unliked"}
   } else {
     return { 'error': res };

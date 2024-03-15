@@ -1,6 +1,9 @@
 import { csrfFetch } from "./csrf"
-import { thunkPostById } from "./post";
 import { createSelector } from "reselect";
+
+import { thunkAllPosts, thunkPostById } from "./post";
+import { thunkCurrentUserPosts } from "./userPosts";
+import { thunkUsersLikes } from "./like";
 
 //ACTON TYPES
 const LOAD_USER_COMMENTS = 'comments/load_users'
@@ -26,7 +29,13 @@ export const thunkPostComment = (comment) => async (dispatch) => {
   if (res.ok) {
     const newComment = await res.json();
     const id = newComment.id; //(creating a comment returns the post, this is the postId)
-    dispatch(thunkPostById(id)).then(() => dispatch(thunkUserComments()))
+    await Promise.all([
+      dispatch(thunkAllPosts()),
+      dispatch(thunkCurrentUserPosts()),
+      dispatch(thunkUserComments()),
+      dispatch(thunkUsersLikes()),
+      dispatch(thunkPostById(id))
+    ])
   } else {
     return { 'error': res};
   }

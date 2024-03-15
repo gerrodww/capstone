@@ -1,0 +1,30 @@
+.posts-container {
+  background-color: whitesmoke;
+  width: 600px;
+  margin: 0 auto 10px auto;
+  border-radius: 5px;
+}
+
+.post-tile {
+  width: 550px;
+  margin: 0 auto 10px auto;
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.post-body {
+  border-bottom: 1px solid black;
+  padding-bottom: 10px;
+}
+
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.update-delete {
+  display: flex;
+  flex-direction: column;
+}

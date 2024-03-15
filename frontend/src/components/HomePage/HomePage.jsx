@@ -1,16 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { thunkAllPosts, postsArray, userPostsArray } from '../../redux/post';
+import { thunkAllPosts, postsArray } from '../../redux/post';
 import { thunkUsersLikes } from '../../redux/like';
 import { usersLikesArray } from '../../redux/like';
 import { commentsArray, thunkUserComments } from '../../redux/comment';
+import { thunkCurrentUserPosts, userPostsArray } from '../../redux/userPosts';
 import Spinner from "../Spinner"
 import PostTile from '../PostTile';
+import MyPostsTile from '../MyPostsTile';
 import './HomePage.css';
 
 
 const HomePage = () => {
   const dispatch = useDispatch();
+
+  const currentUser = useSelector((state) => state.session.user);
+  const userId = currentUser?.id;
+
   const [ loaded, setLoaded ] = useState(false);
   const [showUserPosts, setShowUserPosts] = useState(false);
   const [showUserComments, setShowUserComments] = useState(false);
@@ -19,6 +25,7 @@ const HomePage = () => {
   useEffect(() => {
     Promise.all([
       dispatch(thunkAllPosts()),
+      dispatch(thunkCurrentUserPosts()),
       dispatch(thunkUserComments()),
       dispatch(thunkUsersLikes())
     ])
@@ -28,38 +35,31 @@ const HomePage = () => {
     });
   }, [dispatch])
 
-  const currentUser = useSelector((state) => state.session.user);
-  const userId = currentUser?.id;
   const allPosts = useSelector(postsArray);
-  const userPosts = useSelector((state) => userPostsArray(state, userId));
+  const userPosts = useSelector(userPostsArray);
   const userLikes = useSelector(usersLikesArray)
   const userComments = useSelector(commentsArray)
 
-
   const handleShowUserPosts = () => {
-    console.log('clicked my posts')
-    setShowUserPosts(true);
     setShowUserComments(false);
     setShowUserLikes(false);
+    setShowUserPosts(true);
   };
 
   const handleShowUserComments = () => {
-    console.log('clicked my comments')
-    setShowUserComments(true);
     setShowUserPosts(false);
     setShowUserLikes(false);
+    setShowUserComments(true);
 
   };
 
   const handleShowUserLikes = () => {
-    console.log('clicked my likes')
-    setShowUserLikes(true);
     setShowUserPosts(false);
     setShowUserComments(false);
+    setShowUserLikes(true);
   };
 
   const handleShowAllPosts = () => {
-    console.log('clicked all posts')
     setShowUserPosts(false);
     setShowUserComments(false);
     setShowUserLikes(false);
@@ -98,7 +98,7 @@ const HomePage = () => {
         <PostTile posts={userComments} />
       )}
       {showUserPosts && currentUser && (
-        <PostTile posts={userPosts} />
+        <MyPostsTile posts={userPosts} />
       )}
       <div className='right-bar'></div>
       </div>
