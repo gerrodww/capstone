@@ -1,36 +1,44 @@
 import { useSelector } from 'react-redux';
+import DeleteCommentModal from './DeleteCommentModal';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
-import DeletePostModal from './DeletePostModal';
-import UpdatePostModal from './UpdatePostsModal';
 import NewComment from '../PostTile/NewComment';
 import NewLike from '../PostTile/NewLike';
 import Unlike from '../PostTile/Unlike';
-import './MyPostsTile.css';
+import './MyCommentsTile.css';
 
-const PostTile = ({ posts }) => {
+const CommentsTile = ({ posts }) => {
   const currentUser = useSelector((state) => state.session.user);
 
   return (
     <div className='posts-container'>
       {posts?.sort((a, b) => b.id - a.id).map((post) => (
         <div className='post-tile' key={post.id}>
-          <div className='title-bar'>
-            <h2>{post.User.username}</h2>
-            <div className='update-delete'>
-              <OpenModalButton 
-                modalComponent={ <UpdatePostModal post={post}/>}
-                buttonText={"Edit Post"}/>
-              <OpenModalButton 
-                modalComponent={ <DeletePostModal post={post}/>}
-                buttonText={"Delete Post"}/>
-            </div>
-          </div>
+          <h2>{post.User.username}</h2>
           <p className='post-body'>{post.body}</p>
           {currentUser && post.Comments.length > 0 && (
             <div className='comments-container'>
-              <h4>Comments</h4>
+              <h4 className='comments-title'>Comments</h4>
+              
                 {post.Comments.sort((a, b) => a.id - b.id).map(comment => (
-                  <div className='comment' key={comment.id}>{comment.body}</div>
+                  <div className='comment' key={comment.id}>
+                    <div className='comment-content'>
+                      <div className='comment-username'>
+                        {comment.User.username}:
+                      </div>
+                      <div className='comment-body'>
+                        {comment.body}
+                      </div>
+                    </div> 
+                    {currentUser.id === comment.userId && (
+                      <div className='comment-update-delete'>
+                        <OpenModalButton 
+                          buttonText={"Edit Comment"}/>
+                        <OpenModalButton 
+                          modalComponent={<DeleteCommentModal comment={comment}/>}
+                          buttonText={"Delete Comment"}/>
+                      </div>
+                    )}
+                  </div>
                   ))}
             </div>
           )}
@@ -57,4 +65,4 @@ const PostTile = ({ posts }) => {
   )
 }
 
-export default PostTile;
+export default CommentsTile;

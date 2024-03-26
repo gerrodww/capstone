@@ -36,7 +36,7 @@ function UpdatePostModal({ post }) {
   return (
     <>
       <div>
-        <h2>Update Post</h2>
+        <h2>Edit Post</h2>
         <form onSubmit={handleSubmit}>
           <div>
           <textarea 

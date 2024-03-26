@@ -7,12 +7,20 @@ import { thunkUsersLikes } from "./like";
 
 //ACTON TYPES
 const LOAD_USER_COMMENTS = 'comments/load_users'
+const DELETE_COMMENT = 'comments/delete_comment'
 
 //ACTION CREATORS
 const loadUserComments = (posts) => {
   return {
     type: LOAD_USER_COMMENTS,
     payload: posts
+  }
+}
+
+const deleteComment = (commentId) => {
+  return {
+    type: DELETE_COMMENT,
+    payload: commentId
   }
 }
 
@@ -52,6 +60,44 @@ export const thunkUserComments = () => async (dispatch) => {
   }
 }
 
+export const thunkDeleteComment = (commentId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/comments/delete${commentId}`, {
+    method: 'DELETE'
+  })
+  if (res.ok) {
+    await Promise.all([
+      dispatch(deleteComment(commentId)),
+      dispatch(thunkAllPosts()),
+      dispatch(thunkCurrentUserPosts()),
+      dispatch(thunkUserComments()),
+      dispatch(thunkUsersLikes())
+    ])
+  } else {
+    return { 'error': res};
+  }
+}
+
+export const thunkUpdateComment = (comment) => async (dispatch) => {
+  const { commentId } = comment
+  const res = await csrfFetch(`api/comments/edit${commentId}`, {
+    method: 'PUT',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(comment)
+  });
+  if (res.ok) {
+    await Promise.all([
+      dispatch(thunkAllPosts()),
+      dispatch(thunkCurrentUserPosts()),
+      dispatch(thunkUserComments()),
+      dispatch(thunkUsersLikes())
+    ])
+  } else {
+    return { 'error': res};
+  }
+}
+
 //SELECTORS
 export const commentsArray = createSelector((state) => state.comments, (comments) => {
   return Object.values(comments);
@@ -67,6 +113,10 @@ function commentReducer(state = {}, action) {
         commentsState[post.id] = post;
       })
       return commentsState
+    }
+    case DELETE_COMMENT: {
+      delete commentsState[action.payload]
+      return commentsState;
     }
 
     default: {

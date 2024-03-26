@@ -8,6 +8,7 @@ import { thunkCurrentUserPosts, userPostsArray } from '../../redux/userPosts';
 import Spinner from "../Spinner"
 import PostTile from '../PostTile';
 import MyPostsTile from '../MyPostsTile';
+import CommentsTile from '../MyCommentsTile';
 import './HomePage.css';
 
 
@@ -95,7 +96,7 @@ const HomePage = () => {
         <PostTile posts={userLikes} />
       )}
       {showUserComments && currentUser && (
-        <PostTile posts={userComments} />
+        <CommentsTile posts={userComments} />
       )}
       {showUserPosts && currentUser && (
         <MyPostsTile posts={userPosts} />
