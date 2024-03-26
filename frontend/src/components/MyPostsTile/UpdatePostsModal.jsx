@@ -12,7 +12,7 @@ function UpdatePostModal({ post }) {
   const [ body, setBody ] = useState('')
   const [ imageUrl, setImageUrl ] = useState('')
 
-  const [errors, setErrors] = useState({})
+  const [ errors, setErrors ] = useState({})
 
   useEffect(() => {
     if (post) {

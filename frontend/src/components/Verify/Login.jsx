@@ -1,6 +1,6 @@
 import { FaUser } from 'react-icons/fa'
-import { useModal } from '../../context/Modal'
-import LoginFormModal from './LoginFormModal'
+import { useModal } from '../../context/Modal';
+import LoginFormModal from './LoginFormModal';
 
 const Login = () => {
   const {setModalContent} = useModal();

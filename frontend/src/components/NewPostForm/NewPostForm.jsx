@@ -36,12 +36,12 @@ const NewPostForm = () => {
       rows={4}
       cols={50}/>
       <br />
-      <input 
+      {/* <input 
       type="text"
       value={imageUrl}
       onChange={(e) => setImageUrl(e.target.value)}
       placeholder="Enter image URL (optional)"/>
-      <br />
+      <br /> */}
       <button type="submit">Create post</button>
     </form>
     </div>

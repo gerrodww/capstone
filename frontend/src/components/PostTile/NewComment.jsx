@@ -35,12 +35,12 @@ const NewComment = ({ postId }) => {
       rows={2}
       cols={35}/>
       <br />
-      <input 
+      {/* <input 
       type="text"
       value={imageUrl}
       onChange={(e) => setImageUrl(e.target.value)}
       placeholder="Enter image URL (optional)"/>
-      <br />
+      <br /> */}
       <button type="submit">Comment</button>
     </form>
     </>

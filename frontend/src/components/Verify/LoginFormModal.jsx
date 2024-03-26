@@ -9,7 +9,7 @@ function LoginFormModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const { closeModal, setHideAddButton } = useModal();
+  const { closeModal } = useModal();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +24,6 @@ function LoginFormModal() {
     if (serverResponse) {
       setErrors(serverResponse.errors);
     } else {
-      // setHideAddButton(false)
       closeModal();
     }
   };
@@ -32,8 +31,6 @@ function LoginFormModal() {
   const loginDemoUser = async (e) => {
     e.preventDefault();
     await dispatch(thunkLogin({ email:"demo@user.io", password: "password"})).then(() => closeModal())
-    // setHideAddButton(false)
-
   }
 
   return (

@@ -1,10 +1,7 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { thunkLogout } from "../../redux/session";
-// import { resetPosts } from "../../redux/post";
 import LogoDiv from "./LogoDiv";
-import Login from "./Login";
-import Signup from "./Signup";
 import NewPostForm from "../NewPostForm";
 import "./Navigation.css";
 
@@ -15,7 +12,6 @@ function Navigation() {
 
   const logout = () => {
     dispatch(thunkLogout());
-    // dispatch(resetPosts());
   };
 
   return (
@@ -24,12 +20,6 @@ function Navigation() {
       <div className="top-bar">
         <LogoDiv />
         <div className="nav-buttons">
-        {!currentUser && (
-        <>
-          <Login />
-          <Signup />
-        </>
-        )}
         {currentUser && (
           <button className='loginIcon' onClick={logout}>Log Out</button>
         )}

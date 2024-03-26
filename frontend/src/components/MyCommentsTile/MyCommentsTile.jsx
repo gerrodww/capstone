@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import DeleteCommentModal from './DeleteCommentModal';
+import UpdateCommentModal from './UpdateCommentModal';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import NewComment from '../PostTile/NewComment';
 import NewLike from '../PostTile/NewLike';
@@ -32,6 +33,7 @@ const CommentsTile = ({ posts }) => {
                     {currentUser.id === comment.userId && (
                       <div className='comment-update-delete'>
                         <OpenModalButton 
+                        modalComponent={<UpdateCommentModal comment={comment}/>}
                           buttonText={"Edit Comment"}/>
                         <OpenModalButton 
                           modalComponent={<DeleteCommentModal comment={comment}/>}

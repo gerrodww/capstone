@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { thunkAllPosts, postsArray } from '../../redux/post';
 import { thunkUsersLikes } from '../../redux/like';
 import { usersLikesArray } from '../../redux/like';
@@ -14,6 +15,7 @@ import './HomePage.css';
 
 const HomePage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const currentUser = useSelector((state) => state.session.user);
   const userId = currentUser?.id;
@@ -65,6 +67,10 @@ const HomePage = () => {
     setShowUserComments(false);
     setShowUserLikes(false);
   };
+
+  if (!currentUser) {
+    navigate('/verify')
+  }
 
   if (!loaded) {
     return (
