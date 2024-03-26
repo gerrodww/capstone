@@ -10,12 +10,14 @@ import sessionReducer from "./session";
 import postReducer from "./post";
 import likeReducer from "./like";
 import commentReducer from "./comment";
+import userPostReducer from "./userPosts";
 
 const rootReducer = combineReducers({
     session: sessionReducer,
     posts: postReducer,
     likes: likeReducer,
-    comments: commentReducer
+    comments: commentReducer,
+    userPosts: userPostReducer
 });
 
 let enhancer;

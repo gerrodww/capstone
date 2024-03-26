@@ -8,8 +8,8 @@ const router = express.Router();
 router.get('/all', async (req, res) => {
   const posts = await Post.findAll({
     include : [
-      { model: Comment },
-      { model: Like},
+      { model: Comment, include: [{ model: User, attributes: ['username'] }]},
+      { model: Like, include: [{ model: User, attributes: ['username'] }]},
       { model: User, attributes: ['username']}
     ],
     order: [['id', 'DESC']]
@@ -24,8 +24,30 @@ router.get('/user:userId', async (req, res) => {
   const posts = await Post.findAll({
     where: { userId },
     include : [
-      { model: Comment },
-      { model: Like},
+      { model: Comment, include: [{ model: User, attributes: ['username'] }] },
+      { model: Like, include: [{ model: User, attributes: ['username'] }]},
+      {model: User, attributes: ['username']}
+      
+    ],
+    order: [['id', 'DESC']]
+  });
+
+  if (posts.length === 0) {
+    return res.status(404).json({ message: 'No posts found for this user' })
+  }
+
+  return res.json(posts);
+});
+
+//GET POSTS BY USER ID WITH COMMENTS AND LIKES '/api/posts/mine'
+router.get('/mine', async (req, res) => {
+  const userId = req.user.id
+
+  const posts = await Post.findAll({
+    where: { userId },
+    include : [
+      { model: Comment, include: [{ model: User, attributes: ['username'] }] },
+      { model: Like, include: [{ model: User, attributes: ['username'] }]},
       {model: User, attributes: ['username']}
       
     ],
@@ -46,8 +68,8 @@ router.get('/post:postId', async (req, res) => {
   const post = await Post.findOne({
     where: { id: postId },
     include : [
-      { model: Comment },
-      { model: Like},
+      { model: Comment, include: [{ model: User, attributes: ['username'] }] },
+      { model: Like, include: [{ model: User, attributes: ['username'] }]},
       {model: User, attributes: ['username']}
     ]
   });

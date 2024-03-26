@@ -1,0 +1,17 @@
+.comment {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  margin: 10px;
+  border-bottom: 1px dotted black;
+}
+
+.comment-content {
+  width: 75%;
+}
+
+.comment-update-delete {
+  width: 116px;
+  display: flex;
+  flex-direction: column;
+}

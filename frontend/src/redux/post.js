@@ -1,13 +1,15 @@
 import { csrfFetch } from './csrf';
 import { createSelector } from 'reselect';
 
+import { thunkCurrentUserPosts } from './userPosts';
+import { thunkUserComments } from './comment';
+import { thunkUsersLikes } from './like';
+
 //ACTON TYPES
 const LOAD_ALL_POSTS = 'posts/load_all_posts'
 const LOAD_POST = 'posts/load_post'
 const DELETE_POST = 'posts/delete_post'
-const UPDATE_POST = 'posts/update_post'
 
-const RESET_POSTS = 'posts/reset'
 
 //ACTION CREATORS
 const loadAllPosts = (posts) => {
@@ -31,18 +33,6 @@ const deletePost = (id) => {
   }
 }
 
-const updatePost = (post) => {
-  return {
-    type: DELETE_POST,
-    payload: post
-  }
-}
-
-// export const resetPosts = () => {
-//   return {
-//     type: RESET_POSTS
-//   }
-// }
 
 //THUNKS
 export const thunkAllPosts = () => async (dispatch) => {
@@ -67,17 +57,6 @@ export const thunkPostById = (id) => async (dispatch) => {
   }
 }
 
-export const thunkMyPosts = (id) => async (dispatch) => {
-  const res = await csrfFetch(`/api/posts/user${id}`);
-  if (res.ok) {
-    const posts = await res.json();
-    dispatch(loadAllPosts(posts));
-    return posts;
-  } else {
-    return { 'error': res};
-  }
-}
-
 export const thunkCreatePost = (newPost) => async (dispatch) => {
   const res = await csrfFetch('/api/posts/new', {
     method: 'POST',
@@ -89,7 +68,54 @@ export const thunkCreatePost = (newPost) => async (dispatch) => {
   if (res.ok) {
     const newPost = await res.json();
     const id = newPost.id;
-    dispatch(thunkPostById(id))
+    await Promise.all([
+      dispatch(thunkPostById(id)),
+      dispatch(thunkAllPosts()),
+      dispatch(thunkCurrentUserPosts()),
+      dispatch(thunkUserComments()),
+      dispatch(thunkUsersLikes())
+    ])
+  } else {
+    return { 'error': res};
+  }
+}
+
+export const thunkDeletePost = (id) => async (dispatch) => {
+  const res = await csrfFetch(`/api/posts/delete${id}`, {
+    method: 'DELETE'
+  })
+  if (res.ok) {
+    await Promise.all([
+      dispatch(deletePost(id)),
+      dispatch(thunkAllPosts()),
+      dispatch(thunkCurrentUserPosts()),
+      dispatch(thunkUserComments()),
+      dispatch(thunkUsersLikes()),
+    ])
+  } else {
+    return { 'error': res};
+  }
+}
+
+export const thunkUpdatePost = (post) => async (dispatch) => {
+  const { postId } = post;
+  const res = await csrfFetch(`/api/posts/edit${postId}`, {
+    method: 'PUT',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(post)
+  });
+  if (res.ok) {
+    const updatedPost = await res.json();
+    await Promise.all([
+      dispatch(loadPost(updatedPost)),
+      dispatch(thunkAllPosts()),
+      dispatch(thunkCurrentUserPosts()),
+      dispatch(thunkUserComments()),
+      dispatch(thunkUsersLikes()),
+      dispatch(thunkPostById(postId))
+    ])
   } else {
     return { 'error': res};
   }
@@ -99,13 +125,6 @@ export const thunkCreatePost = (newPost) => async (dispatch) => {
 export const postsArray = createSelector((state) => state.posts, (posts) => {
   return Object.values(posts);
 })
-
-export const userPostsArray = createSelector(
-  (state) => state.posts,
-  (_, userId) => userId,
-  (posts, userId) => {
-    return Object.values(posts).filter(post => post.userId === userId);
-  });
 
 //REDUCER
 function postReducer(state = {}, action) {
@@ -122,14 +141,10 @@ function postReducer(state = {}, action) {
       postsState[action.payload.id] = action.payload
       return postsState;
     }
-    // case RESET_POSTS: {
-    //   return {
-    //     ...postsState,
-    //     showUserPosts: false,
-    //     showUserComments: false,
-    //     showUserLikes: false
-    //   }
-    // }
+    case DELETE_POST: {
+      delete postsState[action.payload]
+      return postsState;
+    }
 
     default: {
       return postsState;
