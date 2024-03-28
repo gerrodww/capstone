@@ -10,6 +10,7 @@ import Spinner from "../Spinner"
 import PostTile from '../PostTile';
 import MyPostsTile from '../MyPostsTile';
 import CommentsTile from '../MyCommentsTile';
+import MyLikes from '../PostTile/MyLikes';
 import './HomePage.css';
 
 
@@ -18,7 +19,6 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const currentUser = useSelector((state) => state.session.user);
-  const userId = currentUser?.id;
 
   const [ loaded, setLoaded ] = useState(false);
   const [showUserPosts, setShowUserPosts] = useState(false);
@@ -99,7 +99,7 @@ const HomePage = () => {
         <PostTile posts={allPosts} />
       )}
       {showUserLikes && currentUser && (
-        <PostTile posts={userLikes} />
+        <MyLikes posts={userLikes} />
       )}
       {showUserComments && currentUser && (
         <CommentsTile posts={userComments} />

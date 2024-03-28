@@ -1,0 +1,42 @@
+.verify-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.verify-container {
+  display: flex;
+  align-items: center;
+}
+
+.verify-title {
+  margin-right: 20px; 
+}
+
+.verify-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.vertical-line {
+  border-left: 1px solid #ccc; 
+  height: 100px; 
+  margin: 0 20px; 
+}
+
+.verify-buttons button {
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  background-color: #000000; 
+  color: #25e90fc1; 
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.verify-buttons button:hover {
+  background-color: #25e90fc1; 
+  color: #000000;
+}
+

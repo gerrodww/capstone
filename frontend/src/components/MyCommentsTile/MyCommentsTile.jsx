@@ -12,6 +12,7 @@ const CommentsTile = ({ posts }) => {
 
   return (
     <div className='posts-container'>
+      {posts.length === 0 && <h2>You have not left any comments yet</h2>}
       {posts?.sort((a, b) => b.id - a.id).map((post) => (
         <div className='post-tile' key={post.id}>
           <h2>{post.User.username}</h2>
@@ -30,7 +31,7 @@ const CommentsTile = ({ posts }) => {
                         {comment.body}
                       </div>
                     </div> 
-                    {currentUser.id === comment.userId && (
+                    {currentUser?.id === comment.userId && (
                       <div className='comment-update-delete'>
                         <OpenModalButton 
                         modalComponent={<UpdateCommentModal comment={comment}/>}

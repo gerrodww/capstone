@@ -1,38 +1,27 @@
 import { useSelector } from 'react-redux';
-import OpenModalButton from '../OpenModalButton/OpenModalButton';
-import DeletePostModal from './DeletePostModal';
-import UpdatePostModal from './UpdatePostsModal';
-import NewComment from '../PostTile/NewComment';
-import NewLike from '../PostTile/NewLike';
-import Unlike from '../PostTile/Unlike';
-import './MyPostsTile.css';
+import NewComment from './NewComment';
+import NewLike from './NewLike';
+import Unlike from './Unlike';
+import './PostTile.css';
 
-const PostTile = ({ posts }) => {
+const MyLikes = ({ posts }) => {
   const currentUser = useSelector((state) => state.session.user);
 
   return (
     <div className='posts-container'>
-      {posts.length === 0 && <h2>You have not made any posts yet, create your first one above!</h2>}
+      {posts.length === 0 && <h2>You have not liked any posts yet</h2>}
       {posts?.sort((a, b) => b.id - a.id).map((post) => (
         <div className='post-tile' key={post.id}>
-          <div className='title-bar'>
-            <h2>{post.User.username}</h2>
-            <div className='update-delete'>
-              <OpenModalButton 
-                modalComponent={ <UpdatePostModal post={post}/>}
-                buttonText={"Edit Post"}/>
-              <OpenModalButton 
-                modalComponent={ <DeletePostModal post={post}/>}
-                buttonText={"Delete Post"}/>
-            </div>
-          </div>
+          <h2>{post.User.username}</h2>
           <p className='post-body'>{post.body}</p>
           {currentUser && post.Comments.length > 0 && (
             <div className='comments-container'>
               <h4>Comments</h4>
+              <ul>
                 {post.Comments.sort((a, b) => a.id - b.id).map(comment => (
-                  <div className='comment' key={comment.id}>{comment.body}</div>
+                  <li key={comment.id}>{comment.body}</li>
                   ))}
+              </ul>
             </div>
           )}
           {currentUser && (
@@ -58,4 +47,4 @@ const PostTile = ({ posts }) => {
   )
 }
 
-export default PostTile;
+export default MyLikes;

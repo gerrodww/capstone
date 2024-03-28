@@ -2,7 +2,7 @@ FROM --platform=amd64 node:18-alpine as backend
 WORKDIR /backend
 COPY /backend/package*.json .
 RUN npm install
-COPY . .
+COPY backend .
 
 # # -------------------------------
 

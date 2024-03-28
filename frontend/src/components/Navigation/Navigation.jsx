@@ -18,7 +18,9 @@ function Navigation() {
     <>
     <nav className="nav-bar">
       <div className="top-bar">
-        <LogoDiv />
+        {location.pathname === '/' && (
+          <LogoDiv />
+        )}
         <div className="nav-buttons">
         {currentUser && (
           <button className='loginIcon' onClick={logout}>Log Out</button>
