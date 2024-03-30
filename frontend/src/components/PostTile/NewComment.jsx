@@ -15,6 +15,13 @@ const NewComment = ({ postId }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
+      setError({})
+      if (body.startsWith(' ')) {
+        throw new Error('Body cannot start with an empty space')
+      }
+      if (body.length < 3 && body.length > 0) {
+        throw new Error('Body length cannot be less than 3')
+      }
       if (body.trim() !== body) {
         throw new Error('Comment body should not begin or end with whitespace');
       }
@@ -65,7 +72,7 @@ const NewComment = ({ postId }) => {
       onChange={(e) => setImageUrl(e.target.value)}
       placeholder="Enter image URL (optional)"/>
       <br /> */}
-      <button type="submit" disabled={body.length < 3 || body.length > charLimit}>Comment</button>
+      <button type="submit">Comment</button>
       {body.length > 0 && (
       <button onClick={clearForm}>Clear form</button>
       )}
