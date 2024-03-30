@@ -29,7 +29,7 @@ const PostTile = ({ posts }) => {
             </div>
           )}
           {currentUser && (
-            <i class="fa-solid fa-thumbs-up">
+            <i className="fa-solid fa-thumbs-up">
               <span className='thumbs-up-count'>
             {post.Likes.length}
               </span>

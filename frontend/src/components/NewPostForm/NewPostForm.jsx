@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { thunkCreatePost } from "../../redux/post";
 import './NewPostForm.css';
@@ -12,10 +12,29 @@ const NewPostForm = () => {
 
   const charLimit = 255;
 
+  // useEffect(() => {
+  //   let newErr = [];
+  //   if (body.startsWith(' ')) {
+  //     newErr.push('Body cannot start with an empty space')
+  //   }
+  //   if (body.length < 3 && body.length > 0) {
+  //     newErr.push('Body length cannot be less than 3')
+  //   }
+  //   if (newErr.length > 0) {
+  //     setError(newErr)
+  //   }
+  // }, [body, error])
+
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
       setError({})
+      if (body.startsWith(' ')) {
+        throw new Error('Body cannot start with an empty space')
+      }
+      if (body.length < 3 && body.length > 0) {
+        throw new Error('Body length cannot be less than 3')
+      }
       if (body.trim() !== body) {
         throw new Error('Post body should not begin or end with whitespace');
       }
@@ -30,7 +49,13 @@ const NewPostForm = () => {
       setImageUrl('');
 
     } catch (error) {
-      setError(error)
+      if (!error.message) {
+        let newError = {};
+        newError.message = error;
+        setError(newError)
+      } else {
+        setError(error)
+      }
     }
   }
 
@@ -65,7 +90,7 @@ const NewPostForm = () => {
       onChange={(e) => setImageUrl(e.target.value)}
       placeholder="Enter image URL (optional)"/>
       <br /> */}
-      <button type="submit" disabled={body.length < 3 || body.length > charLimit}>Create post</button>
+      <button type="submit">Create post</button>
       {body.length > 0 && (
       <button onClick={clearForm}>Clear form</button>
       )}
