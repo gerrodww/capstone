@@ -33,11 +33,17 @@ function SignupFormModal() {
       })
     );
 
+    // if (serverResponse.errors) {
+    //   setErrors(serverResponse.errors);
+    //   return
+    // } 
+    // closeModal();
+
     if (serverResponse.errors) {
       setErrors(serverResponse.errors);
-    } else {
-      closeModal();
-    }
+  } else {
+    closeModal();
+  }
   };
 
   return (

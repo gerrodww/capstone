@@ -62,6 +62,7 @@ export const thunkSignup = (user) => async (dispatch) => {
         if (response.ok) {
             const data = await response.json();
             dispatch(setUser(data.user));
+            return data
         } else if (response.status !== 200) {
             throw response
         } 
