@@ -8,22 +8,36 @@ const NewPostForm = () => {
 
   const [ body, setBody ] = useState('');
   const [ imageUrl, setImageUrl ] = useState('');
+  const [ error, setError ] = useState({})
 
   const charLimit = 255;
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    try {
+      setError({})
+      if (!body || typeof body !== 'string') {
+        throw new Error('Invalid post body');
+      }
+  
+      if (body.trim() !== body) {
+        throw new Error('Post body should not begin or end with whitespace');
+      }
 
-    if (!body.trim()) return
+      const newPost = {
+        body, 
+        imageUrl
+      };
+      
+      dispatch(thunkCreatePost(newPost));
+      setBody('');
+      setImageUrl('');
 
-    const newPost = {
-      body, 
-      imageUrl
-    };
-    
-    dispatch(thunkCreatePost(newPost));
-    setBody('');
-    setImageUrl('');
+    } catch (error) {
+      setError(error)
+    }
+
+
   }
 
   return (
@@ -39,6 +53,11 @@ const NewPostForm = () => {
       />
       <div>
         {body.length}/{charLimit} characters
+      </div>
+      <div>
+        {error && (
+          <p className="error">{error.message}</p>
+        )}
       </div>
       <br />
       {/* <input 
