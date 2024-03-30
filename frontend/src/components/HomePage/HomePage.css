@@ -2,7 +2,6 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  /* position: relative; */
 }
 
 .right-bar, .side-bar {
@@ -12,16 +11,37 @@
 }
 
 .side-bar {
+  display: flex;
   left: 0;
+  margin-left: 165px;
+  justify-content: end;
+}
+
+.side-list {
+  list-style-type: none;
+}
+
+.list-item {
+  cursor: pointer;
+  font-size: x-large;
+  padding: 10px 20px;
+  padding-right: 75px;
+  transition: background-color 0.3s ease;
+}
+
+.list-item:hover {
+  background-color: whitesmoke; 
+}
+
+.list-item-clicked {
   background-color: whitesmoke;
-  margin-left: 155px;
+  border-radius: 50px;
 }
 
 .right-bar {
   right: 0;
-  background-color: rgb(221, 168, 168);
 }
 
-.posts {
-  
+.main-content {
+
 }

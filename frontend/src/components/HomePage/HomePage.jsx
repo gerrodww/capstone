@@ -21,9 +21,7 @@ const HomePage = () => {
   const currentUser = useSelector((state) => state.session.user);
 
   const [ loaded, setLoaded ] = useState(false);
-  const [showUserPosts, setShowUserPosts] = useState(false);
-  const [showUserComments, setShowUserComments] = useState(false);
-  const [showUserLikes, setShowUserLikes] = useState(false);
+  const [ activeTab, setActiveTab ] = useState('allPosts');
 
   useEffect(() => {
     Promise.all([
@@ -43,29 +41,8 @@ const HomePage = () => {
   const userLikes = useSelector(usersLikesArray)
   const userComments = useSelector(commentsArray)
 
-  const handleShowUserPosts = () => {
-    setShowUserComments(false);
-    setShowUserLikes(false);
-    setShowUserPosts(true);
-  };
-
-  const handleShowUserComments = () => {
-    setShowUserPosts(false);
-    setShowUserLikes(false);
-    setShowUserComments(true);
-
-  };
-
-  const handleShowUserLikes = () => {
-    setShowUserPosts(false);
-    setShowUserComments(false);
-    setShowUserLikes(true);
-  };
-
-  const handleShowAllPosts = () => {
-    setShowUserPosts(false);
-    setShowUserComments(false);
-    setShowUserLikes(false);
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
   };
 
   if (!currentUser) {
@@ -82,32 +59,34 @@ const HomePage = () => {
     <>
       <div className='container'>
         <aside className='side-bar'>
-        <ul>
-          <li onClick={handleShowAllPosts}>ALL POSTS</li>
-          { currentUser && (
-            <li onClick={handleShowUserPosts}>MY POSTS</li>
-          )}
-          { currentUser && (
-            <li onClick={handleShowUserComments}>MY COMMENTS</li>
-          )}
-          { currentUser && (
-            <li onClick={handleShowUserLikes}>MY LIKES</li>
-          )}
-        </ul>
+        <ul className='side-list'>
+            <li className={`list-item ${activeTab === 'allPosts' ? 'list-item-clicked' : ''}`} onClick={() => handleTabClick('allPosts')}>ALL POSTS</li>
+            {currentUser && (
+              <li className={`list-item ${activeTab === 'userPosts' ? 'list-item-clicked' : ''}`} onClick={() => handleTabClick('userPosts')}>MY POSTS</li>
+            )}
+            {currentUser && (
+              <li className={`list-item ${activeTab === 'userComments' ? 'list-item-clicked' : ''}`} onClick={() => handleTabClick('userComments')}>MY COMMENTS</li>
+            )}
+            {currentUser && (
+              <li className={`list-item ${activeTab === 'userLikes' ? 'list-item-clicked' : ''}`} onClick={() => handleTabClick('userLikes')}>MY LIKES</li>
+            )}
+          </ul>
       </aside>
-      {!showUserPosts && !showUserComments && !showUserLikes && (
-        <PostTile posts={allPosts} />
-      )}
-      {showUserLikes && currentUser && (
-        <MyLikes posts={userLikes} />
-      )}
-      {showUserComments && currentUser && (
-        <CommentsTile posts={userComments} />
-      )}
-      {showUserPosts && currentUser && (
-        <MyPostsTile posts={userPosts} />
-      )}
-      <div className='right-bar'></div>
+      <div className='main-content'>
+          {activeTab === 'allPosts' && (
+            <PostTile posts={allPosts} />
+          )}
+          {activeTab === 'userLikes' && currentUser && (
+            <MyLikes posts={userLikes} />
+          )}
+          {activeTab === 'userComments' && currentUser && (
+            <CommentsTile posts={userComments} />
+          )}
+          {activeTab === 'userPosts' && currentUser && (
+            <MyPostsTile posts={userPosts} />
+          )}
+        </div>
+        <div className='right-bar'></div>
       </div>
     </>
   )
