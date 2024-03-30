@@ -8,6 +8,7 @@
 
 .comment-content {
   width: 75%;
+  overflow-wrap: break-word;
 }
 
 .comment-update-delete {

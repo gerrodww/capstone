@@ -9,10 +9,12 @@ const NewPostForm = () => {
   const [ body, setBody ] = useState('');
   const [ imageUrl, setImageUrl ] = useState('');
 
+  const charLimit = 255;
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!body.trim) return
+    if (!body.trim()) return
 
     const newPost = {
       body, 
@@ -30,11 +32,14 @@ const NewPostForm = () => {
     <form onSubmit={handleSubmit}>
 
       <textarea 
+      className="new-post-area"
       value={body}
       onChange={(e) => setBody(e.target.value)}
       placeholder="What's on your mind?"
-      rows={4}
-      cols={50}/>
+      />
+      <div>
+        {body.length}/{charLimit} characters
+      </div>
       <br />
       {/* <input 
       type="text"
@@ -42,7 +47,7 @@ const NewPostForm = () => {
       onChange={(e) => setImageUrl(e.target.value)}
       placeholder="Enter image URL (optional)"/>
       <br /> */}
-      <button type="submit">Create post</button>
+      <button type="submit" disabled={body.length < 3 || body.length > charLimit}>Create post</button>
     </form>
     </div>
   )

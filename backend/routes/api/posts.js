@@ -54,9 +54,9 @@ router.get('/mine', async (req, res) => {
     order: [['id', 'DESC']]
   });
 
-  if (posts.length === 0) {
-    return res.status(404).json({ message: 'No posts found for this user' })
-  }
+  // if (posts.length === 0) {
+  //   return res.status(404).json({ message: 'No posts found for this user' })
+  // }
 
   return res.json(posts);
 });

@@ -11,6 +11,7 @@
   border: 2px solid black;
   border-radius: 5px;
   padding: 10px;
+  overflow-wrap: break-word;
 }
 
 .post-body {
@@ -27,4 +28,9 @@
 .update-delete {
   display: flex;
   flex-direction: column;
+}
+
+.comment { 
+  text-wrap: wrap;
+  overflow-wrap: break-word;
 }

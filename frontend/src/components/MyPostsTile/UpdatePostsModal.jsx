@@ -48,10 +48,10 @@ function UpdatePostModal({ post }) {
             {errors && errors.body && <div className="error">{errors.body}</div>}
           </div>
 
-          <div>
+          {/* <div>
             <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="Image Url (optional)"/>
             {errors && errors.imageUrl && <div className="error">{errors.imageUrl}</div>}
-          </div>
+          </div> */}
 
           <button className="update-button" type="submit">Submit Changes</button>
           <button className="update-cancel" onClick={closeModal}>Cancel</button>

@@ -16,11 +16,16 @@ const PostTile = ({ posts }) => {
           {currentUser && post.Comments.length > 0 && (
             <div className='comments-container'>
               <h4>Comments</h4>
-              <ul>
                 {post.Comments.sort((a, b) => a.id - b.id).map(comment => (
-                  <li key={comment.id}>{comment.body}</li>
+                  <div className='comment' key={comment.id}><div className='comment-content'>
+                  <div className='comment-username'>
+                    {comment.User.username}:
+                  </div>
+                  <div className='comment-body'>
+                    {comment.body}
+                  </div>
+                </div> </div>
                   ))}
-              </ul>
             </div>
           )}
           {currentUser && (
@@ -31,7 +36,7 @@ const PostTile = ({ posts }) => {
               <NewComment postId={post.id}/>
             )}
           </div>
-          {currentUser && currentUser.id !== post.userId && (
+          {currentUser && currentUser?.id !== post?.userId && (
             <>
             {post.Likes?.some(like => like.userId === currentUser.id) ? (
             <Unlike postId={post.id}/>

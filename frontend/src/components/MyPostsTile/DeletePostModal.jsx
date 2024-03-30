@@ -27,6 +27,6 @@ function DeletePostModal({ post }) {
       
     </>
   )
-};
+}
 
 export default DeletePostModal;

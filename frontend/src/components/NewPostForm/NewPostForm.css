@@ -5,3 +5,9 @@
   border-radius: 5px;
   padding: 10px;
 }
+
+.new-post-area {
+  resize: none;
+  width: 99%;
+  height: 75px;
+}

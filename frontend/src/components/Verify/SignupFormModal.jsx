@@ -16,6 +16,7 @@ function SignupFormModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({});
 
     if (password !== confirmPassword) {
       return setErrors({
@@ -32,8 +33,8 @@ function SignupFormModal() {
       })
     );
 
-    if (serverResponse) {
-      setErrors(serverResponse);
+    if (serverResponse.errors) {
+      setErrors(serverResponse.errors);
     } else {
       closeModal();
     }
@@ -42,7 +43,7 @@ function SignupFormModal() {
   return (
     <div className="login-container">
       <h1 className="login-title">Sign Up</h1>
-      {errors.server && <p className="error">{errors.server}</p>}
+      {errors.undefined && <p className="error">{errors.undefined}</p>}
       <form className='login-form' onSubmit={handleSubmit}>
         <label className="login-label">
           Email

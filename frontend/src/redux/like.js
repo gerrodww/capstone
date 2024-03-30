@@ -102,6 +102,6 @@ function likeReducer(state = {}, action) {
       return likesState;
     }
   }
-};
+}
 
 export default likeReducer;
