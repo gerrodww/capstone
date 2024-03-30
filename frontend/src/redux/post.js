@@ -150,6 +150,6 @@ function postReducer(state = {}, action) {
       return postsState;
     }
   }
-};
+}
 
 export default postReducer;

@@ -123,6 +123,6 @@ function commentReducer(state = {}, action) {
       return commentsState
     }
   }
-};
+}
 
 export default commentReducer;
