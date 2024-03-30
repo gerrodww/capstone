@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { thunkPostComment } from "../../redux/comment";
+import './NewComment.css';
 
 const NewComment = ({ postId }) => {
   const dispatch = useDispatch();
@@ -8,10 +9,12 @@ const NewComment = ({ postId }) => {
   const [ body, setBody ] = useState('');
   const [ imageUrl, setImageUrl ] = useState('');
 
+  const charLimit = 255;
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!body.trim) return
+    if (!body.trim()) return
 
     const comment = {
       body,
@@ -29,11 +32,15 @@ const NewComment = ({ postId }) => {
     <form onSubmit={handleSubmit}>
 
       <textarea 
+      className="new-comment-area"
       value={body}
       onChange={(e) => setBody(e.target.value)}
       placeholder="Create new comment"
       rows={2}
       cols={35}/>
+      <div>
+        {body.length}/{charLimit} characters
+      </div>
       <br />
       {/* <input 
       type="text"
@@ -41,7 +48,7 @@ const NewComment = ({ postId }) => {
       onChange={(e) => setImageUrl(e.target.value)}
       placeholder="Enter image URL (optional)"/>
       <br /> */}
-      <button type="submit">Comment</button>
+      <button type="submit" disabled={body.length < 3 || body.length > charLimit}>Comment</button>
     </form>
     </>
   )

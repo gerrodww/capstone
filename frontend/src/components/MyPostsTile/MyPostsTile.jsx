@@ -12,7 +12,7 @@ const PostTile = ({ posts }) => {
 
   return (
     <div className='posts-container'>
-      {posts.length === 0 && <h2>You have not made any posts yet, create your first one above!</h2>}
+      {posts?.length === 0 && <h2>You have not made any posts yet, create your first one above!</h2>}
       {posts?.sort((a, b) => b.id - a.id).map((post) => (
         <div className='post-tile' key={post.id}>
           <div className='title-bar'>
@@ -31,7 +31,14 @@ const PostTile = ({ posts }) => {
             <div className='comments-container'>
               <h4>Comments</h4>
                 {post.Comments.sort((a, b) => a.id - b.id).map(comment => (
-                  <div className='comment' key={comment.id}>{comment.body}</div>
+                  <div className='comment' key={comment.id}><div className='comment-content'>
+                  <div className='comment-username'>
+                    {comment.User.username}:
+                  </div>
+                  <div className='comment-body'>
+                    {comment.body}
+                  </div>
+                </div> </div>
                   ))}
             </div>
           )}
@@ -43,7 +50,7 @@ const PostTile = ({ posts }) => {
               <NewComment postId={post.id}/>
             )}
           </div>
-          {currentUser && currentUser.id !== post.userId && (
+          {currentUser.id && currentUser?.id !== post?.userId && (
             <>
             {post.Likes?.some(like => like.userId === currentUser.id) ? (
             <Unlike postId={post.id}/>

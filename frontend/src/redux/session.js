@@ -29,38 +29,46 @@ export const thunkAuthenticate = () => async (dispatch) => {
 };
 
 export const thunkLogin = (credentials) => async dispatch => {
-    const {email, password} = credentials
-    const response = await csrfFetch("/api/session", {
-        method: "POST",
-        body: JSON.stringify({credential: email, password})
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-        dispatch(setUser(data));
-    } else if (response.status < 500) {
-        const errorMessages = await response.json();
+    
+    
+    try {
+        const {email, password} = credentials
+        const response = await csrfFetch("/api/session", {
+            method: "POST",
+            body: JSON.stringify({credential: email, password})
+        });
+        if (response.ok) {
+            const data = await response.json();
+            dispatch(setUser(data.user));
+            return data
+        } else if (response.status !== 200) {
+            throw response
+        }
+        } catch (error) {
+        const errorMessages = await error.json();
         return errorMessages
-    } else {
-        return { server: "Something went wrong. Please try again" }
     }
 };
 
 export const thunkSignup = (user) => async (dispatch) => {
-    const response = await csrfFetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user)
-    });
-
-    if (response.ok) {
-        const data = await response.json();
-        dispatch(setUser(data));
-    } else if (response.status < 500) {
-        const errorMessages = await response.json();
+    
+    try {
+        const response = await csrfFetch("/api/users", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(user)
+        });
+    
+        if (response.ok) {
+            const data = await response.json();
+            dispatch(setUser(data.user));
+        } else if (response.status !== 200) {
+            throw response
+        } 
+        
+    } catch (error) {
+        const errorMessages = await error.json();
         return errorMessages
-    } else {
-        return { server: "Something went wrong. Please try again" }
     }
 };
 

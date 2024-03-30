@@ -23,7 +23,7 @@ function Navigation() {
         )}
         <div className="nav-buttons">
         {currentUser && (
-          <button className='loginIcon' onClick={logout}>Log Out</button>
+          <button className='logout' onClick={logout}>Log Out</button>
         )}
         </div>
       </div>
