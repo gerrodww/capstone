@@ -16,10 +16,6 @@ const NewPostForm = () => {
     e.preventDefault();
     try {
       setError({})
-      if (!body || typeof body !== 'string') {
-        throw new Error('Invalid post body');
-      }
-  
       if (body.trim() !== body) {
         throw new Error('Post body should not begin or end with whitespace');
       }
@@ -36,8 +32,11 @@ const NewPostForm = () => {
     } catch (error) {
       setError(error)
     }
+  }
 
-
+  const clearForm = () => {
+    setBody('')
+    setError({})
   }
 
   return (
@@ -67,6 +66,9 @@ const NewPostForm = () => {
       placeholder="Enter image URL (optional)"/>
       <br /> */}
       <button type="submit" disabled={body.length < 3 || body.length > charLimit}>Create post</button>
+      {body.length > 0 && (
+      <button onClick={clearForm}>Clear form</button>
+      )}
     </form>
     </div>
   )

@@ -8,23 +8,35 @@ const NewComment = ({ postId }) => {
 
   const [ body, setBody ] = useState('');
   const [ imageUrl, setImageUrl ] = useState('');
+  const [ error, setError ] = useState({})
 
   const charLimit = 255;
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    try {
+      if (body.trim() !== body) {
+        throw new Error('Comment body should not begin or end with whitespace');
+      }
 
-    if (!body.trim()) return
+      const comment = {
+        body,
+        imageUrl,
+        postId
+      };
+  
+      dispatch(thunkPostComment(comment));
+      setBody('');
+      setImageUrl('');
+    } catch (error) {
+      setError(error)
+    }
+    
+  }
 
-    const comment = {
-      body,
-      imageUrl,
-      postId
-    };
-
-    dispatch(thunkPostComment(comment));
-    setBody('');
-    setImageUrl('');
+  const clearForm = () => {
+    setBody('')
+    setError({})
   }
 
   return (
@@ -41,6 +53,11 @@ const NewComment = ({ postId }) => {
       <div>
         {body.length}/{charLimit} characters
       </div>
+      <div>
+        {error && (
+          <p className="error">{error.message}</p>
+        )}
+      </div>
       <br />
       {/* <input 
       type="text"
@@ -49,6 +66,9 @@ const NewComment = ({ postId }) => {
       placeholder="Enter image URL (optional)"/>
       <br /> */}
       <button type="submit" disabled={body.length < 3 || body.length > charLimit}>Comment</button>
+      {body.length > 0 && (
+      <button onClick={clearForm}>Clear form</button>
+      )}
     </form>
     </>
   )
