@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from './Layout';
 import HomePage from '../components/HomePage';
 import Verify from '../components/Verify/Verify';
+import UpdateProfile from '../components/UpdateProfile/UpdateProfile';
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ export const router = createBrowserRouter([
       {
         path: "/verify",
         element: <Verify />
+      },
+      {
+        path: '/testing',
+        element: <UpdateProfile />
       },
       {
         path: '*',

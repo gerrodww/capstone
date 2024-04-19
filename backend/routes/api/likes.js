@@ -29,9 +29,9 @@ router.get('/mine', requireAuth, async (req, res) => {
 
   const posts = await Post.findAll({
     include : [
-      { model: Comment, include: [{ model: User, attributes: ['username'] }] },
-      { model: Like, include: [{ model: User, attributes: ['username'] }] },
-      { model: User, attributes: ['username']}
+      { model: Comment, include: [{ model: User, attributes: ['username', 'image'] }] },
+      { model: Like, include: [{ model: User, attributes: ['username', 'image'] }] },
+      { model: User, attributes: ['username', 'image']}
     ],
     order: [['id', 'DESC']]
   });

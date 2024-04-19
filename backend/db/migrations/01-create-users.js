@@ -34,7 +34,7 @@ module.exports = {
         allowNull: true
       },
       image: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(256),
         allowNull: true
       },
       darkMode: {

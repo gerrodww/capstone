@@ -3,6 +3,7 @@ import { csrfFetch } from './csrf';
 //Constants
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
+const EDIT_USER = 'session/editUser';
 
 const setUser = (user) => ({
     type: SET_USER,
@@ -11,6 +12,11 @@ const setUser = (user) => ({
 
 const removeUser = () => ({
     type: REMOVE_USER
+});
+
+const editUser = (user) => ({
+    type: EDIT_USER,
+    payload: user
 });
 
 
@@ -80,6 +86,40 @@ export const thunkLogout = () => async (dispatch) => {
     dispatch(removeUser());
 };
 
+export const updateUserThunk = (userId, form) => async (dispatch) => {
+    const { image, username, bio, darkMode, previewUrl } = form
+    try {
+        const formData = new FormData();
+
+        formData.append('userId', userId);
+        formData.append('image', image);
+        formData.append('username', username);
+        formData.append('bio', bio);
+        formData.append('darkMode', darkMode);
+        formData.append('previewUrl', previewUrl);
+
+        const res = await csrfFetch(`/api/users/edit${userId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'multipart/form-data' },
+            body: formData
+        });
+        
+        if (res.ok) {
+            const user = await res.json();
+            dispatch(editUser(user));
+        } else if (res.status < 500) {
+            const data = await res.json();
+            if (data.errors) {
+                return data
+            } else {
+                throw new Error('An error occurred. Please try again.')
+            }
+        }
+    } catch (e) {
+        return e
+    }
+}
+
 
 const initialState = { user: null };
 
@@ -89,6 +129,8 @@ function sessionReducer(state = initialState, action) {
             return { ...state, user: action.payload };
         case REMOVE_USER:
             return { ...state, user: null };
+        case EDIT_USER:
+            return { ...state, user: action.payload };
         default:
             return state;
     }

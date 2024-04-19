@@ -46,6 +46,9 @@ router.post('/', async (req, res, next) => {
         id: user.id,
         email: user.email,
         username: user.username,
+        bio: user.bio,
+        darkMode: user.darkMode,
+        image: user.image
     };
 
     await setTokenCookie(res, safeUser);

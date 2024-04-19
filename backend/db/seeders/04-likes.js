@@ -93,6 +93,10 @@ module.exports = {
           userId: 2,
           postId: 10
         },
+        {
+          userId: 1,
+          postId: 16
+        }
       ], {})
     },
 

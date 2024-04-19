@@ -1,6 +1,7 @@
 const express = require('express');
 const { requireAuth } = require('../../utils/auth');
-const { Post, Comment, Like, User } = require('../../db/models')
+const { Post, Comment, Like, User } = require('../../db/models');
+const { singleMulterUpload, singlePublicFileUpload } = require('../../awsS3');
 
 const router = express.Router();
 
@@ -8,9 +9,9 @@ const router = express.Router();
 router.get('/all', async (req, res) => {
   const posts = await Post.findAll({
     include : [
-      { model: Comment, include: [{ model: User, attributes: ['username'] }]},
-      { model: Like, include: [{ model: User, attributes: ['username'] }]},
-      { model: User, attributes: ['username']}
+      { model: Comment, include: [{ model: User, attributes: ['username', 'image'] }]},
+      { model: Like, include: [{ model: User, attributes: ['username', 'image'] }]},
+      { model: User, attributes: ['username', 'image']}
     ],
     order: [['id', 'DESC']]
   });
@@ -24,9 +25,9 @@ router.get('/user:userId', async (req, res) => {
   const posts = await Post.findAll({
     where: { userId },
     include : [
-      { model: Comment, include: [{ model: User, attributes: ['username'] }] },
-      { model: Like, include: [{ model: User, attributes: ['username'] }]},
-      {model: User, attributes: ['username']}
+      { model: Comment, include: [{ model: User, attributes: ['username', 'image'] }] },
+      { model: Like, include: [{ model: User, attributes: ['username', 'image'] }]},
+      {model: User, attributes: ['username', 'image']}
       
     ],
     order: [['id', 'DESC']]
@@ -46,9 +47,9 @@ router.get('/mine', async (req, res) => {
   const posts = await Post.findAll({
     where: { userId },
     include : [
-      { model: Comment, include: [{ model: User, attributes: ['username'] }] },
-      { model: Like, include: [{ model: User, attributes: ['username'] }]},
-      {model: User, attributes: ['username']}
+      { model: Comment, include: [{ model: User, attributes: ['username', 'image'] }] },
+      { model: Like, include: [{ model: User, attributes: ['username', 'image'] }]},
+      {model: User, attributes: ['username', 'image']}
       
     ],
     order: [['id', 'DESC']]
@@ -68,9 +69,9 @@ router.get('/post:postId', async (req, res) => {
   const post = await Post.findOne({
     where: { id: postId },
     include : [
-      { model: Comment, include: [{ model: User, attributes: ['username'] }] },
-      { model: Like, include: [{ model: User, attributes: ['username'] }]},
-      {model: User, attributes: ['username']}
+      { model: Comment, include: [{ model: User, attributes: ['username', 'image'] }] },
+      { model: Like, include: [{ model: User, attributes: ['username', 'image'] }]},
+      {model: User, attributes: ['username', 'image']}
     ]
   });
 
@@ -82,13 +83,25 @@ router.get('/post:postId', async (req, res) => {
 });
 
 //CREATE NEW POST '/api/posts/new'
-router.post('/new', requireAuth, async (req, res) => {
-  const userId = req.user.id
-  const { body, imageUrl } = req.body
-
-  const newPost = await Post.create({ userId, body, imageUrl });
-
-  return res.status(201).json(newPost);
+router.post('/new', requireAuth, singleMulterUpload('imgUrl'), async (req, res) => {
+  try {
+    const userId = req.user.id
+    const { body } = req.body
+    let imgUrl;
+    if (req.file) {
+      try {
+        imgUrl = await singlePublicFileUpload(req.file);
+      } catch (error) {
+        console.log('Error:', error)
+      }
+    }
+  
+    const newPost = await Post.create({ userId, body, imageUrl: imgUrl });
+  
+    return res.status(201).json(newPost);
+  } catch (error) {
+    return error
+  }
 });
 
 //EDIT POST BY POST ID '/api/posts/edit1'

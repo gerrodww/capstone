@@ -20,7 +20,7 @@ module.exports = {
         {
           body: "Hail Reaper!",
           userId: 1,
-          postId: 15
+          postId: 14
         },
         {
           body: "no",
@@ -58,7 +58,7 @@ module.exports = {
           postId: 5 
         },
         {
-          body: "Another commnet!",
+          body: "Another comment!",
           userId: 2,
           postId: 1 
         },

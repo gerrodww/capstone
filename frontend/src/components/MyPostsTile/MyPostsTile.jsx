@@ -15,18 +15,28 @@ const PostTile = ({ posts }) => {
       {posts?.length === 0 && <h2>You have not made any posts yet, create your first one above!</h2>}
       {posts?.sort((a, b) => b.id - a.id).map((post) => (
         <div className='post-tile' key={post.id}>
-          <div className='title-bar'>
-            <h2>{post.User.username}</h2>
-            <div className='update-delete'>
-              <OpenModalButton 
-                modalComponent={ <UpdatePostModal post={post}/>}
-                buttonText={"Edit Post"}/>
-              <OpenModalButton 
-                modalComponent={ <DeletePostModal post={post}/>}
-                buttonText={"Delete Post"}/>
-            </div>
+          <div className='post-headline'>
+            {post.User.image && (
+              <img src={post.User.image} className='userimage-post'/>)}
+          <h2>{post.User.username}</h2>
           </div>
-          <p className='post-body'>{post.body}</p>
+          {post.imageUrl && (
+            <img src={post.imageUrl} className='body-image'/>)}
+            <div className='post-body'>
+              <p>{post.body}</p>
+              <div className='update-delete'>
+                <div className='edit-post'>
+                  <OpenModalButton 
+                  modalComponent={ <UpdatePostModal post={post}/>}
+                  buttonText={"Edit Post"}/>
+                </div>
+                <div className='delete-post'>
+                  <OpenModalButton 
+                  modalComponent={ <DeletePostModal post={post}/>}
+                  buttonText={"Delete Post"}/>
+                </div>
+              </div>
+            </div>
           {currentUser && post.Comments.length > 0 && (
             <div className='comments-container'>
               <h4>Comments</h4>
@@ -43,7 +53,7 @@ const PostTile = ({ posts }) => {
             </div>
           )}
           {currentUser && (
-            <i class="fa-solid fa-thumbs-up">
+            <i className="fa-solid fa-thumbs-up">
             <span className='thumbs-up-count'>
               {post.Likes.length}
             </span>

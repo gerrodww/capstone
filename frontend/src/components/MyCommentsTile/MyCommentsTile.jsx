@@ -15,7 +15,13 @@ const CommentsTile = ({ posts }) => {
       {posts.length === 0 && <h2>You have not left any comments yet</h2>}
       {posts?.sort((a, b) => b.id - a.id).map((post) => (
         <div className='post-tile' key={post.id}>
+          <div className='post-headline'>
+            {post.User.image && (
+              <img src={post.User.image} className='userimage-post'/>)}
           <h2>{post.User.username}</h2>
+          </div>
+          {post.imageUrl && (
+            <img src={post.imageUrl} className='body-image'/>)}
           <p className='post-body'>{post.body}</p>
           {currentUser && post.Comments.length > 0 && (
             <div className='comments-container'>
@@ -46,7 +52,7 @@ const CommentsTile = ({ posts }) => {
             </div>
           )}
           {currentUser && (
-            <i class="fa-solid fa-thumbs-up">
+            <i className="fa-solid fa-thumbs-up">
             <span className='thumbs-up-count'>
               {post.Likes.length}
             </span>

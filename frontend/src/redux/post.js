@@ -58,25 +58,34 @@ export const thunkPostById = (id) => async (dispatch) => {
 }
 
 export const thunkCreatePost = (newPost) => async (dispatch) => {
-  const res = await csrfFetch('/api/posts/new', {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(newPost)
-  })
-  if (res.ok) {
-    const newPost = await res.json();
-    const id = newPost.id;
-    await Promise.all([
-      dispatch(thunkPostById(id)),
-      dispatch(thunkAllPosts()),
-      dispatch(thunkCurrentUserPosts()),
-      dispatch(thunkUserComments()),
-      dispatch(thunkUsersLikes())
-    ])
-  } else {
-    return { 'error': res};
+  const { body, imgUrl } = newPost;
+  try {
+    const formData = new FormData();
+
+    formData.append('body', body);
+    formData.append('imgUrl', imgUrl);
+
+    const res = await csrfFetch('/api/posts/new', {
+      method: 'POST',
+      headers: { "Content-Type": "multipart/form-data" },
+      body: formData
+    })
+    console.log(res)
+    if (res.ok) {
+      const newPost = await res.json();
+      const id = newPost.id;
+      await Promise.all([
+        dispatch(thunkPostById(id)),
+        dispatch(thunkAllPosts()),
+        dispatch(thunkCurrentUserPosts()),
+        dispatch(thunkUserComments()),
+        dispatch(thunkUsersLikes())
+      ])
+    } else {
+      throw new Error({ 'error': res});
+    }
+  } catch (error) {
+    return error
   }
 }
 

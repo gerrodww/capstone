@@ -10,20 +10,23 @@ const NewComment = ({ postId }) => {
   const [ imageUrl, setImageUrl ] = useState('');
   const [ error, setError ] = useState({})
 
-  const charLimit = 255;
+  const charLimit = 280;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
       setError({})
       if (body.startsWith(' ')) {
-        throw new Error('Body cannot start with an empty space')
+        throw new Error('Comment cannot start with an empty space')
       }
-      if (body.length < 3 && body.length > 0) {
-        throw new Error('Body length cannot be less than 3')
+      if (body.length < 3 && body.length >= 0) {
+        throw new Error('Comment length cannot be less than 3')
       }
       if (body.trim() !== body) {
-        throw new Error('Comment body should not begin or end with whitespace');
+        throw new Error('Comment should not begin or end with whitespace');
+      }
+      if (body.length > 280) {
+        throw new Error('Comment must be 280 characters or less');
       }
 
       const comment = {

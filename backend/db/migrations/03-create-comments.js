@@ -16,12 +16,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       body : {
-        allowNull: false,
-        type: Sequelize.STRING
+        allowNull: true,
+        type: Sequelize.STRING(280)
       },
       imageUrl: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(256)
       },
       userId: {
         allowNull: false,

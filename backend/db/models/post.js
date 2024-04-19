@@ -10,14 +10,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   Post.init({
     body: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.STRING(280),
+      allowNull: true,
       validate: {
-        len: [3, 4096]
+        len: [3, 280]
       }
     },
     imageUrl: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(256),
       allowNull: true
     },
     userId: {

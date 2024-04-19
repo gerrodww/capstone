@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { thunkCreatePost } from "../../redux/post";
 import './NewPostForm.css';
@@ -7,46 +7,61 @@ const NewPostForm = () => {
   const dispatch = useDispatch();
 
   const [ body, setBody ] = useState('');
-  const [ imageUrl, setImageUrl ] = useState('');
   const [ error, setError ] = useState({})
 
-  const charLimit = 255;
+  const [ imgUrl, setImgUrl ] = useState("")
+  const [ showUpload, setShowUpload ] = useState(true);
+  const [ previewUrl, setPreviewUrl ] = useState("");
 
-  // useEffect(() => {
-  //   let newErr = [];
-  //   if (body.startsWith(' ')) {
-  //     newErr.push('Body cannot start with an empty space')
-  //   }
-  //   if (body.length < 3 && body.length > 0) {
-  //     newErr.push('Body length cannot be less than 3')
-  //   }
-  //   if (newErr.length > 0) {
-  //     setError(newErr)
-  //   }
-  // }, [body, error])
+  const charLimit = 280;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setError({})
-      if (body.startsWith(' ')) {
-        throw new Error('Body cannot start with an empty space')
+      if (!imgUrl) {
+        if (body.trim().length === 0) {
+          throw new Error('Post cannot be empty')
+        }
+        if (body.startsWith(' ')) {
+          throw new Error('Post cannot start with an empty space')
+        }
+        if (body.length < 3 && body.length >= 0) {
+          throw new Error('Post length cannot be less than 3')
+        }
+        if (body.trim() !== body) {
+          throw new Error('Post should not begin or end with whitespace');
+        }
+        if (body.length > charLimit) {
+          throw new Error('Post must be 280 characters or less');
+        }
       }
-      if (body.length < 3 && body.length > 0) {
-        throw new Error('Body length cannot be less than 3')
-      }
-      if (body.trim() !== body) {
-        throw new Error('Post body should not begin or end with whitespace');
+
+      if (imgUrl && body) {
+        if (body.startsWith(' ')) {
+          throw new Error('Post cannot start with an empty space')
+        }
+        if (body.length < 3 && body.length >= 0) {
+          throw new Error('Post length cannot be less than 3')
+        }
+        if (body.trim() !== body) {
+          throw new Error('Post should not begin or end with whitespace');
+        }
+        if (body.length > charLimit) {
+          throw new Error('Post must be 280 characters or less');
+        }
       }
 
       const newPost = {
-        body, 
-        imageUrl
+        body,
+        imgUrl
       };
       
-      dispatch(thunkCreatePost(newPost));
+      await dispatch(thunkCreatePost(newPost));
       setBody('');
-      setImageUrl('');
+      setImgUrl('');
+      setPreviewUrl('')
+      setShowUpload(true)
 
     } catch (error) {
       if (!error.message) {
@@ -59,9 +74,27 @@ const NewPostForm = () => {
     }
   }
 
+  const updateImage = async (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setPreviewUrl(reader.result);
+    }
+    setImgUrl(file);
+    setShowUpload(false)
+  }
+
   const clearForm = () => {
-    setBody('')
     setError({})
+    setBody('')
+    setImgUrl('')
+    setPreviewUrl('')
+    setShowUpload(true)
+  }
+
+  const errorCheck = () => {
+    return Object.keys(error).length > 0;
   }
 
   return (
@@ -79,21 +112,36 @@ const NewPostForm = () => {
         {body.length}/{charLimit} characters
       </div>
       <div>
+      {showUpload && (
+        <>
+          <label htmlFor='file-upload'>Select From Computer 
+            <input
+            type='file'
+            id='file-upload'
+            name='img_url'
+            onChange={updateImage}
+            accept='.jpg, .jpeg, .png, .gif'/>
+          </label>
+        </>)}
+      {!showUpload && (
+        <div>
+          <img 
+          src={previewUrl}
+          alt='preview'/>
+          <button onClick={() => setShowUpload(true)}>Clear File</button>
+        </div>)}
+      </div>
+      <div>
         {error && (
           <p className="error">{error.message}</p>
         )}
       </div>
       <br />
-      {/* <input 
-      type="text"
-      value={imageUrl}
-      onChange={(e) => setImageUrl(e.target.value)}
-      placeholder="Enter image URL (optional)"/>
-      <br /> */}
+      
       <button type="submit">Create post</button>
-      {body.length > 0 && (
+      {errorCheck() || body.length > 0 && (
       <button onClick={clearForm}>Clear form</button>
-      )}
+    )}
     </form>
     </div>
   )

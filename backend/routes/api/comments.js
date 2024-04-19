@@ -10,9 +10,9 @@ router.get('/mine', requireAuth, async (req, res) => {
   // const comments = await Comment.findAll({ where: { userId }, order: [['postId', 'DESC']]})
   const posts = await Post.findAll({
     include : [
-      { model: Comment, include: [{ model: User, attributes: ['username'] }] },
-      { model: Like, include: [{ model: User, attributes: ['username'] }] },
-      { model: User, attributes: ['username']}
+      { model: Comment, include: [{ model: User, attributes: ['username', 'image'] }] },
+      { model: Like, include: [{ model: User, attributes: ['username', 'image'] }] },
+      { model: User, attributes: ['username', 'image']}
     ]
   });
 
