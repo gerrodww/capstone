@@ -28,6 +28,9 @@ ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
 ARG AWS_SECRET_ACCESS_KEY=YAhXv5E2cvIxEmjeyhU9Wq5cyAr+fq1CRcMm1iCa
 ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 
+ARG AWS_BUCKET_NAME=capstone-gerrodww
+ENV AWS_BUCKET_NAME=AWS_BUCKET_NAME
+
 ARG DATABASE_URL=postgres://app_academy_projects_diwm_user:JvQ9X90AGfsN0Ac8nukMALGtu2RyCt1M@dpg-cnojev7jbltc73fj49vg-a.ohio-postgres.render.com/app_academy_projects_diwm
 ENV DATABASE_URL=${DATABASE_URL}
 ARG JWT_SECRET=strongpassword
