@@ -86,18 +86,18 @@ router.get('/post:postId', async (req, res) => {
 router.post('/new', requireAuth, singleMulterUpload('imgUrl'), async (req, res) => {
   try {
     const userId = req.user.id
-    const { body } = req.body
+    let { body } = req.body
+    if (!body) {
+      body = null;
+    }
     let imgUrl;
     if (req.file) {
-      try {
-        imgUrl = await singlePublicFileUpload(req.file);
-      } catch (error) {
-        console.log('Error:', error)
-      }
+      imgUrl = await singlePublicFileUpload(req.file);
     }
-  
+    if (!req.file) {
+      imgUrl = null
+    }
     const newPost = await Post.create({ userId, body, imageUrl: imgUrl });
-  
     return res.status(201).json(newPost);
   } catch (error) {
     return error
