@@ -1,6 +1,7 @@
 const express = require('express');
 const { requireAuth } = require('../../utils/auth');
 const { Comment, Post, Like, User } = require('../../db/models');
+const { singleMulterUpload, singlePublicFileUpload } = require('../../awsS3');
 
 const router = express.Router();
 
@@ -24,25 +25,37 @@ router.get('/mine', requireAuth, async (req, res) => {
 });
 
 //CREATE COMMENT BY POST ID '/api/comments/new1'
-router.post('/new:postId', requireAuth, async (req, res) => {
-  const { body, imageUrl } = req.body
-  const userId = req.user.id 
-  const postId = req.params.postId
+router.post('/new:postId', requireAuth, singleMulterUpload('imgUrl'), async (req, res) => {
+  try {
+    const userId = req.user.id 
+    const postId = req.params.postId
+    let { body } = req.body;
+    if (!body) {
+      body = null;
+    }
+    const post = await Post.findOne({
+      where: { id: postId },
+      include : [
+        { model: Comment },
+        { model: Like },
+        { model: User, attributes: ['username']}
+      ]
+    });
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+    let imgUrl;
+    if (req.file) {
+      imgUrl = await singlePublicFileUpload(req.file)
+    }
+    if (!req.file) {
+      imgUrl = null
+    }
 
-  const post = await Post.findOne({
-    where: { id: postId },
-    include : [
-      { model: Comment },
-      { model: Like },
-      { model: User, attributes: ['username']}
-    ]
-  });
-  if (!post) return res.status(404).json({ message: 'Post not found' });
-
-  const newComment = await Comment.create({ body, imageUrl, userId, postId });
-  post.Comments.push(newComment);
-
-  return res.status(201).json(post);
+    const newComment = await Comment.create({ body, imageUrl: imgUrl, userId, postId });
+    post.Comments.push(newComment);
+    return res.status(201).json(post);
+  } catch (error) {
+    return error
+  }
 });
 
 //EDIT COMMENT BY COMMENT ID '/api/comments/edit1'

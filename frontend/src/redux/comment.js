@@ -30,7 +30,7 @@ export const thunkPostComment = (comment) => async (dispatch) => {
   const res = await csrfFetch(`/api/comments/new${postId}`, {
     method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "multipart/form-data"
     },
     body: JSON.stringify(comment)
   })
